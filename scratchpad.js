@@ -44,3 +44,26 @@ function filterChange(event) {
 }
 
 dateFilter.on("click", filterChange);
+
+\b(?=\w) = word start
+\b(?=/\w)\d+\s?*/g
+String.prototype.makeMinutes = function () {
+  return this.split(" ", function(txt) {
+    return parseInt(txt[0]);
+    console.log(txt);
+  });
+};
+
+ class="form-row"
+                   <input type="text" class="form-control" placeholder="First name"></th>
+
+
+                   function durationParse(text) {
+                     // convert text to lowercase characters (chars)
+                     var chars = text
+                       .toLowerCase()
+                       .split(\b(?=/\w)\d)
+                       console.log(chars[0]);
+
+                     // return counts;
+                   }

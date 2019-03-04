@@ -2,17 +2,17 @@
 <html>
 
 <head>
-  <meta charset="utf-8">
+  <meta charset="UTF-8">
   <title>UFO Finder</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/superhero/bootstrap.min.css">
-  <!-- <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet"> -->
-  <!-- <link rel="stylesheet" href="static/css/style.css"> -->
+  <link rel="stylesheet" href="https://bootswatch.com/4/solar/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+  <link rel="stylesheet" href="static/css/style.css">
 </head>
 
 <body>
   <div class="wrapper">
-      <!--<nav class="navbar navbar-default">
+      <nav class="navbar navbar-default">
       <div class="container-fluid">
         <div class="navbar-header">
           <a class="navbar-brand" href="index.html">UFO Sightings
@@ -20,7 +20,7 @@
           </a>
         </div>
       </div>
-    </nav>-->
+    </nav>
     <div class="hero text-center">
       <h1>UFO Sightings</h1>
       <p>The Truth is Out There</p>
@@ -36,12 +36,33 @@
                   <div class="form-group">
                     <ul class="list-group" id="filters">
                       <li class="filter list-group-item">
-                        <label for="date">Enter a Date</label>
-                        <input class="form-control" id="datetime" type="text" placeholder="1/11/2011">
+                        <label for="datetime" class="small">Select a Date</label>
+                        <div class="dropdown">
+  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Dates
+                        <span class="caret"></span></button>
+                        <ul class="dropdown-menu" id="date-ddl">
+                          <li>
+                          <a href="#">First Date</a>
+                          </li>
+                        </ul>
+                      </div>
+                        <!-- <input class="form-control" id="datetime" type="text" placeholder="1/11/2011"> -->
+                        <!-- <button id="date-btn" type="submit" class="btn btn-default">Submit</button></li> -->
+                      <!-- <li class="filter list-group-item">
+                        <label for="city">Enter a City</label>
+                        <input class="form-control" id="city" type="text" placeholder="El Cahon">
+                        <button id="city-btn" type="submit" class="btn btn-default">Submit</button></li>
+                      <li class="filter list-group-item">
+                        <label for="state">Enter a State (Abbr)</label>
+                        <input class="form-control" id="state" type="text" placeholder="CA">
+                        <button id="state-btn" type="submit" class="btn btn-default">Submit</button>
                       </li>
-                    </ul>
-                  </div>
-                  <button id="filter-btn" type="submit" class="btn btn-default">Filter Table</button>
+                      <li class="filter list-group-item">
+                        <label for="shape">Enter a Shape</label>
+                        <input class="form-control" id="shape" type="text" placeholder="Triangle">
+                      <button id="shape-btn" type="submit" class="btn btn-default">Submit</button></li> -->
+                </ul>
+              </div>
                 </form>
               </div>
             </div>
@@ -52,7 +73,7 @@
             <table id="ufo-table" class="table table-striped">
               <thead>
                 <tr>
-                  <th class="table-head">Date</th>
+                  <th class="table-head">Date<br />
                   <th class="table-head">City</th>
                   <th class="table-head">State</th>
                   <th class="table-head">Country</th>
@@ -61,8 +82,11 @@
                   <th class="table-head">Comments</th>
                 </tr>
               </thead>
+              </form>
               <tbody></tbody>
             </table>
+            <div id="table-end" class="bottom"><a href="#">See all the sightings</a>
+            </div>
           </div>
         </div>
       </div>

@@ -94,25 +94,27 @@ select {
 /* The styles for the parallax */
 .hero {
   position: relative;
-  height: 550px;
+  height: 300px;
   padding: 20px;
   margin: 0;
   background: black;
-  background-image: url("../images/nasa.jpg");
-  background-attachment: fixed;
-  background-position: bottom center;
+  background-image: url("../images/152585.jpg");
+  background-attachment: scroll;
+  background-position: top;
   background-size: cover;
 }
 
 .hero h1 {
-  margin-top: 200px;
+  margin-top: 30px;
   font-size: 0.1rem;
+  color: black;
   animation: title 1.2s forwards linear;
 }
 
 .hero p {
-  font-size: 2rem;
-  opacity: 0;
+  font-size: 1rem;
+  opacity: inherit;
+  color: #232426;
   animation: subtitle 1.2s forwards linear;
   animation-delay: 1.2s;
 }
@@ -153,7 +155,7 @@ select {
   #table-area tr td:first-child {
     font-size: 1.8em;
     font-weight: bold;
-    background: #1b3146;
+    background: #b7b668;
   }
 
   #table-area tr td:last-child {
@@ -198,7 +200,7 @@ select {
   }
 
   to {
-    font-size: 7.5rem;
+    font-size: 2.5rem;
     opacity: 1;
   }
 }
