@@ -13,28 +13,37 @@ if (key === "datetime") {
 }
   });
 });
-
+// Populate the dropdown list itself
 console.log(uniqueDate);
 var dateDdl = d3.select("#date-ddl")
 uniqueDate.forEach((date) => {
-  var listitem = dateDdl.append("li");
-  console.log(date)
-  listitem.text(date);
+  var listitem = dateDdl.append("a")
+  .attr("class","dropdown-item")
+  .attr("value", date)
+  .text(date)
+  .on("click", filterChange);
 });
 //====================
 // Filtering by date
-var dateFilter = d3.select("#date-btn");
-dateFilter.on("click", filterChange);
+// var dateFilter = d3.select("#date-ddl");
+// dateFilter.on("click", filterChange);
+
+// function dateSelect(){
+//     let dateChoice = d3.select(this).property("value")
+//     console.log(dateChoice);
+// }//data.find(d => d.datetime === dateChoice)
+
+
 // Showing all data from bottom link
 var moreData = d3.select("#table-end")
 moreData.on("click", allData);
 //====================
 function filterChange(event) {
   d3.event.preventDefault();
-  var inputValue = d3.select("#datetime").property("value");
-  // console.log("This is the input", inputValue)
+  var inputValue = d3.select(this).property("text");
+  console.log("This is the input", inputValue)
   var filteredData = data.filter(date => date.datetime === inputValue);
-  // console.log("This is my data before drawing", filteredData);
+  console.log("This is my data before drawing", filteredData);
   drawTable(filteredData)
   //Then go on and insert rows/columns into table using D3
 }
