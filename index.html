@@ -27,26 +27,9 @@
     </div>
     <div class="container">
       <div class="row margin-top-50">
-        <!-- <div class="col-md-2">
-          <aside class="filters">
-            <div class="panel panel-default">
-              <div class="panel-heading">Filter Search</div>
-              <div class="panel-body">
-                <div class="btn-group dropright">
-  <button type="button" class="btn btn-secondary dropdown-toggle"
-  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    Select Date
-  </button>
-  <div class="dropdown-menu" id="date-ddl">
-  </div>
-</div>
-
-              </div>
-            </div>
-          </aside>
-        </div> -->
         <div class="col-md-12">
           <div id="table-area" class="">
+            <div id="result-msg" class="small"></div>
             <table id="ufo-table" class="table table-striped">
               <thead>
                 <tr>
@@ -68,7 +51,7 @@
                     <!-- Dropdown menu links -->
                   </div>
                   </div></td>
-                  <td><div class="input-group">
+                  <td><div class="input-group input-group-sm mb-3">
                     <input type="text" id="city-text" class="form-control"
                   placeholder="City Name" aria-label="Enter City Name" aria-describedby="city-button">
                     <div class="input-group-append">

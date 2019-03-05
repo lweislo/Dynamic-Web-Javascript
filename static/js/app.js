@@ -21,7 +21,6 @@ if (key === "datetime") {
       uniqueDate.push(value);}}
   else if (key === "city") {
     if (!uniqueCity.includes(value)) {
-      value = value.toProperCase();
       uniqueCity.push(value);}}
   else if (key === "state") {
     if (!uniqueState.includes(value)) {
@@ -50,15 +49,9 @@ uniqueState.forEach((state) => {
   .on("click", filterChange);
 });
 //============CITY=======================
-uniqueCity.sort()
-var cityDdl = d3.select("#city-ddl")
-uniqueCity.forEach((city) => {
-  var listitem = cityDdl.append("a")
-  .attr("class","dropdown-item")
-  .attr("value", "city")
-  .text(city)
-  .on("click", filterChange);
-});
+var cityBtn = d3.select("#city-btn")
+cityBtn.on("click", filterChange)
+
 //=========================================
 // Showing all data from bottom link
 var moreData = d3.select("#table-end")
@@ -67,25 +60,41 @@ moreData.on("click", allData);
 function filterChange(event) {
   d3.event.preventDefault();
   var inputText = d3.select(this).property("text");
-  inputText = inputText.toLowerCase();
   var inputOrigin = d3.select(this).attr("value");
-  if (inputOrigin === "datetime") {
+  var inputId = d3.select(this).attr("id");
+  console.log(inputText, inputOrigin, inputId)
+  if (inputId !== null) {
+    inputText = d3.select("#city-text").property("value");
+    inputText = inputText.toLowerCase();
+  var filteredData = data.filter(item => item.city === inputText);}
+  else if (inputOrigin === "datetime") {
   var filteredData = data.filter(item => item.datetime === inputText);}
   else if (inputOrigin === "state") {
   var filteredData = data.filter(item => item.state === inputText);}
-  else if (inputOrigin === "city") {
-  var filteredData = data.filter(item => item.city === inputText);}
-
-  console.log("This is my data before drawing", filteredData);
-  drawTable(filteredData)
+//Check to see if there are any results!
+  resultsLen = filteredData.length;
+  if (resultsLen === 0 && inputId === "city-btn"){
+    var tmsg = d3.select("#result-msg");
+    tmsg.append("p").text("There were no results for that exact selection, but here are partial matches.");
+    inputText = inputText.toLowerCase();
+    var filteredData = data.filter(item => item.city.includes(inputText));
+}
+  //write partial search here
+  drawTable(filteredData);
   //Then go on and insert rows/columns into table using D3
 }
 //===================
 // Get a reference to the table body
 function drawTable(filteredData) {
+  resultsLen = filteredData.length;
+  var tmsg = d3.select("#result-msg");
   var tbody = d3.select("tbody");
-  var tdiv = d3.select("#table-area")
-  tbody.html("")
+  var tdiv = d3.select("#table-area");
+  tbody.html("");
+    if (resultsLen === 0) {
+      tmsg.append("p").text("There were no results for that selection.");
+      defaultTable();
+    }
 // Add the rows and cells of data from the data.js source file.
   filteredData.forEach((ufoSighting) => {
   var row = tbody.append("tr");
