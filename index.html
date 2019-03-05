@@ -27,7 +27,7 @@
     </div>
     <div class="container">
       <div class="row margin-top-50">
-        <div class="col-md-2">
+        <!-- <div class="col-md-2">
           <aside class="filters">
             <div class="panel panel-default">
               <div class="panel-heading">Filter Search</div>
@@ -38,46 +38,14 @@
     Select Date
   </button>
   <div class="dropdown-menu" id="date-ddl">
-    <!-- Dropdown menu links -->
   </div>
 </div>
-                <!-- <form>
-                  <div class="form-group">
-                    <ul class="list-group" id="filters"> -->
-                      <!-- <li class="filter list-group-item">
-                        <label for="datetime" class="small">Select a Date</label>
-                        <div class="dropdown">
-  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Dates
-                        <span class="caret"></span></button>
-                        <ul class="dropdown-menu" id="date-ddl">
-                          <li>
-                          <a href="#">First Date</a>
-                          </li>
-                        </ul>
-                      </div> -->
-                        <!-- <input class="form-control" id="datetime" type="text" placeholder="1/11/2011"> -->
-                        <!-- <button id="date-btn" type="submit" class="btn btn-default">Submit</button></li> -->
-                      <!-- <li class="filter list-group-item">
-                        <label for="city">Enter a City</label>
-                        <input class="form-control" id="city" type="text" placeholder="El Cahon">
-                        <button id="city-btn" type="submit" class="btn btn-default">Submit</button></li>
-                      <li class="filter list-group-item">
-                        <label for="state">Enter a State (Abbr)</label>
-                        <input class="form-control" id="state" type="text" placeholder="CA">
-                        <button id="state-btn" type="submit" class="btn btn-default">Submit</button>
-                      </li>
-                      <li class="filter list-group-item">
-                        <label for="shape">Enter a Shape</label>
-                        <input class="form-control" id="shape" type="text" placeholder="Triangle">
-                      <button id="shape-btn" type="submit" class="btn btn-default">Submit</button></li> -->
-                <!-- </ul>
-              </div>
-                </form> -->
+
               </div>
             </div>
           </aside>
-        </div>
-        <div class="col-md-10">
+        </div> -->
+        <div class="col-md-12">
           <div id="table-area" class="">
             <table id="ufo-table" class="table table-striped">
               <thead>
@@ -90,8 +58,41 @@
                   <th class="table-head">Duration</th>
                   <th class="table-head">Comments</th>
                 </tr>
+                <tr>
+                  <td><div class="btn-group dropright">
+                  <button type="button" class="btn btn-secondary dropdown-toggle btn-sm"
+                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Filter Date
+                  </button>
+                  <div class="dropdown-menu" id="date-ddl">
+                    <!-- Dropdown menu links -->
+                  </div>
+                  </div></td>
+                  <td><div class="input-group">
+                    <input type="text" id="city-text" class="form-control"
+                  placeholder="City Name" aria-label="Enter City Name" aria-describedby="city-button">
+                    <div class="input-group-append">
+                      <button class="btn btn-outline-secondary btn-sm" id="city-btn" type="button">Go!</button>
+                    </div>
+                  </div>
+                  </td>
+                  <td><div class="btn-group dropright">
+                  <button type="button" class="btn btn-secondary dropdown-toggle btn-sm"
+                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Filter State
+                  </button>
+                  <div class="dropdown-menu" id="state-ddl">
+                  <!-- Dropdown menu links -->
+                  </div>
+                  </div></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+
+                  </td>
+                </tr>
               </thead>
-              </form>
               <tbody></tbody>
             </table>
             <div id="table-end" class="bottom"><a href="#">See all the sightings</a>

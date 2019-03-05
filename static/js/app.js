@@ -4,45 +4,78 @@ var data = data;
 //====================
 //Populate Dropdown list array
 var uniqueDate = []
+var uniqueCity = []
+var uniqueState = []
+//====================
+// To convert the table data to proper case
+String.prototype.toProperCase = function () {
+    return this.replace(/\w\S*/g, function(txt) {
+      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    });
+};
+//========================
 data.forEach((item) => {
 Object.entries(item).forEach(([key, value]) => {
 if (key === "datetime") {
   if (!uniqueDate.includes(value)) {
-      uniqueDate.push(value);
-  }
-}
+      uniqueDate.push(value);}}
+  else if (key === "city") {
+    if (!uniqueCity.includes(value)) {
+      value = value.toProperCase();
+      uniqueCity.push(value);}}
+  else if (key === "state") {
+    if (!uniqueState.includes(value)) {
+    uniqueState.push(value);}}
   });
 });
 // Populate the dropdown list itself
-console.log(uniqueDate);
+//=============DATE========================
 var dateDdl = d3.select("#date-ddl")
 uniqueDate.forEach((date) => {
   var listitem = dateDdl.append("a")
   .attr("class","dropdown-item")
-  .attr("value", date)
+  .attr("value", "datetime")
   .text(date)
   .on("click", filterChange);
 });
-//====================
-// Filtering by date
-// var dateFilter = d3.select("#date-ddl");
-// dateFilter.on("click", filterChange);
-
-// function dateSelect(){
-//     let dateChoice = d3.select(this).property("value")
-//     console.log(dateChoice);
-// }//data.find(d => d.datetime === dateChoice)
-
-
+//=============STATE=======================
+uniqueState.sort()
+var stateDdl = d3.select("#state-ddl")
+uniqueState.forEach((state) => {
+  state = state.toUpperCase();
+  var listitem = stateDdl.append("a")
+  .attr("class","dropdown-item")
+  .attr("value", "state")
+  .text(state)
+  .on("click", filterChange);
+});
+//============CITY=======================
+uniqueCity.sort()
+var cityDdl = d3.select("#city-ddl")
+uniqueCity.forEach((city) => {
+  var listitem = cityDdl.append("a")
+  .attr("class","dropdown-item")
+  .attr("value", "city")
+  .text(city)
+  .on("click", filterChange);
+});
+//=========================================
 // Showing all data from bottom link
 var moreData = d3.select("#table-end")
 moreData.on("click", allData);
 //====================
 function filterChange(event) {
   d3.event.preventDefault();
-  var inputValue = d3.select(this).property("text");
-  console.log("This is the input", inputValue)
-  var filteredData = data.filter(date => date.datetime === inputValue);
+  var inputText = d3.select(this).property("text");
+  inputText = inputText.toLowerCase();
+  var inputOrigin = d3.select(this).attr("value");
+  if (inputOrigin === "datetime") {
+  var filteredData = data.filter(item => item.datetime === inputText);}
+  else if (inputOrigin === "state") {
+  var filteredData = data.filter(item => item.state === inputText);}
+  else if (inputOrigin === "city") {
+  var filteredData = data.filter(item => item.city === inputText);}
+
   console.log("This is my data before drawing", filteredData);
   drawTable(filteredData)
   //Then go on and insert rows/columns into table using D3
@@ -86,13 +119,7 @@ function allData(event) {
   // d3.event.preventDefault();
   drawTable(data);
 }
-//====================
-// To convert the table data to proper case
-String.prototype.toProperCase = function () {
-    return this.replace(/\w\S*/g, function(txt) {
-      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-    });
-};
+
 //====================
 function stripHtml(html){
     // Create a temporary div element
