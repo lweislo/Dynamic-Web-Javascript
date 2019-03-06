@@ -1,4 +1,6 @@
-
+/**
+@TODO Fix it so the open text inputs are cleared after data is displayed
+*/
 // from data.js
 var data = data;
 //====================
@@ -15,7 +17,11 @@ String.prototype.toProperCase = function () {
       return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
     });
 };
-//========================
+// //========================
+// //
+// console.log(data.map(item => item.date)
+//   .filter((value, index, self) => self.indexOf(value) === index));
+// //
 data.forEach((item) => {
 Object.entries(item).forEach(([key, value]) => {
 if (key === "datetime") {
@@ -111,6 +117,7 @@ function filterChange(event) {
   let inputSelect = d3.select(this).property("text");
   let cityText = d3.select("#city-text").property("value");
   let comText = d3.select("#comment-text").property("value");
+  let tmsg = d3.select("#result-msg");
   //Did the event come from a dropdown?
   //If so make the variable all lowercase
   if (inputSelect){
@@ -127,11 +134,11 @@ function filterChange(event) {
 
 // Filter statements here
   if (inputOrigin === "datetime") {
-  filteredData = data.filter(item => item.datetime === inputSelect);
+  var filteredData = data.filter(item => item.datetime === inputSelect);
   }
   //State dropdown filter
   else if (inputOrigin === "state") {
-  filteredData = data.filter(item => item.state === inputSelect);
+  var filteredData = data.filter(item => item.state === inputSelect);
   }
     //Country dropdown filter
   else if (inputOrigin === "country") {
@@ -143,39 +150,59 @@ function filterChange(event) {
   }
   else if (inputId === "city-btn") {
   // City text field
-    if (partialTextBox) {
-      filteredData = data.filter(item => item.city.includes(cityText));
+    if (!partialTextBox) {
+      var filteredData = data.filter(item => item.city.includes(cityText));
+    }
+    else {
+      var filteredData = data.filter(item => item.city === cityText);
+    }
+  }
+  else if (inputId === "comment-btn") {
+  // City text field
+
+    if (!partialTextBox) {
+      var filteredData = data.filter(item => item.comment.includes(comText));
     }
     else {
       var filteredData = data.filter(item => item.city === cityText);
     }
   }
   //write partial search here
-  drawTable(filteredData, inputId);
+  if (filteredData.length === 0) {
+    console.log("No results")
+    clearAll();
+  }
+  else {
+    drawTable(filteredData, inputId);
+  }
   //Then go on and insert rows/columns into table using D3
 }
-//===================
-// DRAW TABLE
-//===================
+
+/*========
+* CLEAR DYNAMIC ELEMENTS
+======*/
+function clearAll() {
+  let tbody = d3.select("tbody");
+  let tmsg = d3.select("#result-msg");
+  let cityInput = d3.select("#city-text");
+  let comInput = d3.select("#comment-text");
+  tbody.html("");
+  cityInput.reset();
+  comInput.reset();
+  tmsg.append("p").text("There were no results for that selection.");
+  console.log("All clear.")
+  }
+/*===================
+ DRAW TABLE
+===================*/
 // Get a reference to the table body
 function drawTable(filteredData, inputId) {
   var tbody = d3.select("tbody");
   var tmsg = d3.select("#result-msg");
   resultsLen = filteredData.length;
   tbody.html("");
-  tmsg.html("")
-    if (resultsLen === 0) {
-      tmsg.append("p").text("There were no results for that selection.");
-      defaultTable();
-    }
-    //Check to see if there are any results!
+  tmsg.append("p").text(`There were ${resultsLen} records that matched.`);
 
-    //   console.log(resultsLen);
-    // else if (resultsLen === 0 && inputId === "city-btn") {
-    //     var tmsg = d3.select("#result-msg");
-    //     tmsg.append("p").text("There were no results for that exact selection, but here are partial matches.");
-    //     filteredData = data.filter(item => item.city.includes(cityText));
-    // }
 // Add the rows and cells of data from the data.js source file.
   filteredData.forEach((ufoSighting) => {
   var row = tbody.append("tr");
@@ -193,6 +220,9 @@ function drawTable(filteredData, inputId) {
     cell.text(value);
   }); //end of forEach 2
 }); //end of forEach 1
+d3.select("#city-text").html("");
+d3.select("#comment-text").html("");
+tmsg.html("");
 } //end of function
 //====================
 // On page load, show a slice of the data
