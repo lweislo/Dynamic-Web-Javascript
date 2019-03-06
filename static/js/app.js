@@ -18,10 +18,7 @@ String.prototype.toProperCase = function () {
     });
 };
 // //========================
-// //
-// console.log(data.map(item => item.date)
-//   .filter((value, index, self) => self.indexOf(value) === index));
-// //
+// Populate the arrays for ddls
 data.forEach((item) => {
 Object.entries(item).forEach(([key, value]) => {
 if (key === "datetime") {
@@ -49,7 +46,7 @@ uniqueDate.forEach((date) => {
   .attr("class","dropdown-item")
   .attr("value", "datetime")
   .text(date)
-  .on("click", filterChange);
+  .on("click", selectFilterChange);
 });
 //=============STATE=======================
 uniqueState.sort()
@@ -60,7 +57,7 @@ uniqueState.forEach((state) => {
   .attr("class","dropdown-item")
   .attr("value", "state")
   .text(state)
-  .on("click", filterChange);
+  .on("click", selectFilterChange);
 });
 //=============COUNTRY=======================
 uniqueCountry.sort()
@@ -71,7 +68,7 @@ uniqueCountry.forEach((country) => {
   .attr("class","dropdown-item")
   .attr("value", "country")
   .text(country)
-  .on("click", filterChange);
+  .on("click", selectFilterChange);
 });
 //=============SHAPE========================
 uniqueShape.sort()
@@ -82,12 +79,13 @@ uniqueShape.forEach((shape) => {
   .attr("class","dropdown-item")
   .attr("value", "shape")
   .text(shape)
-  .on("click", filterChange);
+  .on("click", selectFilterChange);
 });
-//============CITY=======================
+//============CITY/Comment=======================
 var cityBtn = d3.select("#city-btn")
-cityBtn.on("click", filterChange)
-
+cityBtn.on("click", textFilterChange)
+var comBtn = d3.select("#comment-btn")
+comBtn.on("click", textFilterChange)
 //=========================================
 // Show all data from bottom link
 var moreData = d3.select("#table-end")
@@ -110,27 +108,65 @@ function partialText() {
 //=======================================
 //        FILTER SECTION
 //=======================================
-function filterChange(event) {
+
+function textFilterChange(event) {
   d3.event.preventDefault();
+  var tbody = d3.select("tbody");
+  tbody.html("");
+  var cityText = d3.select("#city-text").property("value").toLowerCase();
+  var comText = d3.select("#comment-text").property("value").toLowerCase();
+  var inputId = d3.select(this).attr("id");
+  console.log(cityText, comText, inputId)
+
+    if (inputId === "city-btn") {
+    // City text field
+      if (!partialTextBox) {
+        var filteredData = data.filter(item => item.city.includes(cityText));
+      }
+      else {
+        var filteredData = data.filter(item => item.city === cityText);
+      }
+    }
+    else if (inputId === "comment-btn") {
+    // City text field
+      if (!partialTextBox) {
+        var filteredData = data.filter(item => item.comments.toLowerCase().includes(comText));
+      }
+      else {
+        var filteredData = data.filter(item => item.comments === comText);
+      }
+    }
+      if (filteredData.length === 0) {
+        console.log("No results")
+        /*========
+        * CLEAR DYNAMIC ELEMENTS
+        ======*/
+          var tbody = d3.select("tbody");
+          var tmsg = d3.select("#result-msg");
+          var cityInput = d3.select("#city-text");
+          var comInput = d3.select("#comment-text");
+          tbody.html("");
+          cityText = "";
+          comText = "";
+          tmsg.text("There were no results for that selection. Try unchecking exact text search box.");
+          console.log("All text clear.");
+          }
+      else {
+        console.log("Results", filteredData.length, filteredData)
+        drawTable(filteredData);
+      }
+  } //END of textFilterChange
+
+function selectFilterChange(event) {
+  d3.event.preventDefault();
+  var tbody = d3.select("tbody");
+  tbody.html("");
   // Check the text, value and id of the triggering element
   // Incoming is either from dropdown (select) or open text (two)
-  let inputSelect = d3.select(this).property("text");
-  let cityText = d3.select("#city-text").property("value");
-  let comText = d3.select("#comment-text").property("value");
-  let tmsg = d3.select("#result-msg");
-  //Did the event come from a dropdown?
-  //If so make the variable all lowercase
-  if (inputSelect){
-    inputSelect = inputSelect.toLowerCase();
-  }
-  // Get the name of the element that raised the event
+  var inputSelect = d3.select(this).property("text").toLowerCase();
+  var tmsg = d3.select("#result-msg");
+  console.log(inputSelect, tmsg)
   inputOrigin = d3.select(this).attr("value");
-  inputId = d3.select(this).attr("id");
-
-  //If it's open text from City also make lowercase
-  if (cityText) {
-    cityText = cityText.toLowerCase();
-    inputOrigin = d3.select(this).attr("id")}
 
 // Filter statements here
   if (inputOrigin === "datetime") {
@@ -148,59 +184,34 @@ function filterChange(event) {
   else if (inputOrigin === "shape") {
     var filteredData = data.filter(item => item["shape"] === inputSelect);
   }
-  else if (inputId === "city-btn") {
-  // City text field
-    if (!partialTextBox) {
-      var filteredData = data.filter(item => item.city.includes(cityText));
-    }
-    else {
-      var filteredData = data.filter(item => item.city === cityText);
-    }
-  }
-  else if (inputId === "comment-btn") {
-  // City text field
 
-    if (!partialTextBox) {
-      var filteredData = data.filter(item => item.comment.includes(comText));
-    }
-    else {
-      var filteredData = data.filter(item => item.city === cityText);
-    }
-  }
-  //write partial search here
   if (filteredData.length === 0) {
     console.log("No results")
-    clearAll();
-  }
+    /*========
+    * CLEAR DYNAMIC ELEMENTS
+    ======*/
+      var tbody = d3.select("tbody");
+      var tmsg = d3.select("#result-msg");
+      tbody.html("");
+      tmsg.text("There were no results for that selection.");
+      console.log("All clear.");
+      }
   else {
-    drawTable(filteredData, inputId);
+    drawTable(filteredData);
   }
   //Then go on and insert rows/columns into table using D3
-}
+} //END selectFilterChange
 
-/*========
-* CLEAR DYNAMIC ELEMENTS
-======*/
-function clearAll() {
-  let tbody = d3.select("tbody");
-  let tmsg = d3.select("#result-msg");
-  let cityInput = d3.select("#city-text");
-  let comInput = d3.select("#comment-text");
-  tbody.html("");
-  cityInput.reset();
-  comInput.reset();
-  tmsg.append("p").text("There were no results for that selection.");
-  console.log("All clear.")
-  }
+
 /*===================
  DRAW TABLE
 ===================*/
 // Get a reference to the table body
-function drawTable(filteredData, inputId) {
+function drawTable(filteredData) {
   var tbody = d3.select("tbody");
-  var tmsg = d3.select("#result-msg");
+  console.log("Drawing table")
   resultsLen = filteredData.length;
-  tbody.html("");
+  var tmsg = d3.select("#result-msg");
   tmsg.append("p").text(`There were ${resultsLen} records that matched.`);
 
 // Add the rows and cells of data from the data.js source file.
@@ -220,13 +231,13 @@ function drawTable(filteredData, inputId) {
     cell.text(value);
   }); //end of forEach 2
 }); //end of forEach 1
-d3.select("#city-text").html("");
-d3.select("#comment-text").html("");
+
 tmsg.html("");
 } //end of function
 //====================
 // On page load, show a slice of the data
 function defaultTable(event) {
+
   drawTable(data.slice(0,10));
 }
 window.onload = function () {
