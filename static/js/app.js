@@ -1,5 +1,5 @@
 /**
-@TODO Fix it so the open text inputs are cleared after data is displayed
+@TODO Try to fix the stripe and hover on the bootstrap table element
 */
 // from data.js
 var data = data;
@@ -17,8 +17,8 @@ String.prototype.toProperCase = function () {
       return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
     });
 };
-// //========================
-// Populate the arrays for ddls
+/*=========================================
+Populate the arrays for ddls*/
 data.forEach((item) => {
 Object.entries(item).forEach(([key, value]) => {
 if (key === "datetime") {
@@ -38,8 +38,8 @@ if (key === "datetime") {
     uniqueShape.push(value);}}
   });
 });
-// Populate the dropdown list itself
-//=============DATE========================
+// Populate the dropdown lists
+//=============DATE======================
 var dateDdl = d3.select("#date-ddl")
 uniqueDate.forEach((date) => {
   var listitem = dateDdl.append("a")
@@ -48,7 +48,7 @@ uniqueDate.forEach((date) => {
   .text(date)
   .on("click", selectFilterChange);
 });
-//=============STATE=======================
+//=============STATE======================
 uniqueState.sort()
 var stateDdl = d3.select("#state-ddl")
 uniqueState.forEach((state) => {
@@ -59,7 +59,7 @@ uniqueState.forEach((state) => {
   .text(state)
   .on("click", selectFilterChange);
 });
-//=============COUNTRY=======================
+//=============COUNTRY=====================
 uniqueCountry.sort()
 var countryDdl = d3.select("#country-ddl")
 uniqueCountry.forEach((country) => {
@@ -70,7 +70,7 @@ uniqueCountry.forEach((country) => {
   .text(country)
   .on("click", selectFilterChange);
 });
-//=============SHAPE========================
+//=============SHAPE======================
 uniqueShape.sort()
 var shapeDdl = d3.select("#shape-ddl")
 uniqueShape.forEach((shape) => {
@@ -81,21 +81,23 @@ uniqueShape.forEach((shape) => {
   .text(shape)
   .on("click", selectFilterChange);
 });
-//============CITY/Comment=======================
+//============TEXT BOX EVENTS==========
 var cityBtn = d3.select("#city-btn")
 cityBtn.on("click", textFilterChange)
 var comBtn = d3.select("#comment-btn")
 comBtn.on("click", textFilterChange)
-//=========================================
+//=============SEE ALL DATA ==========
 // Show all data from bottom link
 var moreData = d3.select("#table-end")
 moreData.on("click", allData);
-//=========================================
+//============TIGHT TEXT SEARCH=============
 //Check for partial text searching
 var partialTextBox = false;
 var partText = d3.select("#text-check");
 partText.on("change", partialText);
-//=========================================
+/*=========================================
+THIS HANDLES THE CHECKBOX FOR TIGHT TEXT SEARCHING
+===========================================*/
 function partialText() {
   if (partialTextBox) {
     partialTextBox = false;
@@ -103,11 +105,11 @@ function partialText() {
   else {
     partialTextBox = true
   }
-  console.log("Is checked", partialTextBox)
+  // console.log("Is checked", partialTextBox)
 }
-//=======================================
-//        FILTER SECTION
-//=======================================
+/*=========================================
+       FILTER SECTION
+==========================================*/
 
 function textFilterChange(event) {
   d3.event.preventDefault();
@@ -116,7 +118,7 @@ function textFilterChange(event) {
   var cityText = d3.select("#city-text").property("value").toLowerCase();
   var comText = d3.select("#comment-text").property("value").toLowerCase();
   var inputId = d3.select(this).attr("id");
-  console.log(cityText, comText, inputId)
+  // console.log(cityText, comText, inputId)
 
     if (inputId === "city-btn") {
     // City text field
@@ -138,9 +140,7 @@ function textFilterChange(event) {
     }
       if (filteredData.length === 0) {
         console.log("No results")
-        /*========
-        * CLEAR DYNAMIC ELEMENTS
-        ======*/
+          /*======== IF EMPTY CLEAR DYNAMIC ELEMENTS ======*/
           var tbody = d3.select("tbody");
           var tmsg = d3.select("#result-msg");
           var cityInput = d3.select("#city-text");
@@ -156,7 +156,9 @@ function textFilterChange(event) {
         drawTable(filteredData);
       }
   } //END of textFilterChange
+/*======== END OF TEXT BOX FILTER FUNCTION ======*/
 
+/*======== START DROPDOWN LIST FILTER FUNCTIONS ======*/
 function selectFilterChange(event) {
   d3.event.preventDefault();
   var tbody = d3.select("tbody");
@@ -187,33 +189,28 @@ function selectFilterChange(event) {
 
   if (filteredData.length === 0) {
     console.log("No results")
-    /*========
-    * CLEAR DYNAMIC ELEMENTS
-    ======*/
+  /*======== CLEAR DYNAMIC ELEMENTS IF NO RESULTS ======*/
       var tbody = d3.select("tbody");
       var tmsg = d3.select("#result-msg");
       tbody.html("");
       tmsg.text("There were no results for that selection.");
-      console.log("All clear.");
+      // console.log("All clear.");
       }
   else {
     drawTable(filteredData);
   }
-  //Then go on and insert rows/columns into table using D3
-} //END selectFilterChange
-
-
-/*===================
+  //Draw dynamic table with drawTable function
+} //END selectFilterChange function
+/*====================================
  DRAW TABLE
-===================*/
+======================================*/
 // Get a reference to the table body
 function drawTable(filteredData) {
   var tbody = d3.select("tbody");
-  console.log("Drawing table")
+  // console.log("Drawing table")
   resultsLen = filteredData.length;
   var tmsg = d3.select("#result-msg");
   tmsg.append("p").text(`There were ${resultsLen} records that matched.`);
-
 // Add the rows and cells of data from the data.js source file.
   filteredData.forEach((ufoSighting) => {
   var row = tbody.append("tr");
@@ -233,24 +230,30 @@ function drawTable(filteredData) {
 }); //end of forEach 1
 
 tmsg.html("");
-} //end of function
+} //end of drawtable function
 //====================
+
+/*===========================
 // On page load, show a slice of the data
+=============================*/
 function defaultTable(event) {
 
   drawTable(data.slice(0,10));
 }
+
 window.onload = function () {
   defaultTable();
 };
-//====================
-// Load all of the data if the user clicks the link at the bottom
+/*====================
+ Load all of the data if the user clicks the link at the bottom
+======================*/
 function allData(event) {
   // d3.event.preventDefault();
   drawTable(data);
 }
-
-//====================
+/*====================
+Convert the html encodings to characters
+=====================*/
 function stripHtml(html){
     // Create a temporary div element
     var tempDiv = document.createElement("div");
