@@ -213,7 +213,7 @@ function drawTable(filteredData) {
   tmsg.append("p").text(`There were ${resultsLen} records that matched.`);
 // Add the rows and cells of data from the data.js source file.
   filteredData.forEach((ufoSighting) => {
-  var row = tbody.append("tr");
+  tbody.append("tr");
   Object.entries(ufoSighting).forEach(([key, value]) => {
     // Pretty up cases in table data
     if (key === "city") {
