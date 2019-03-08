@@ -203,6 +203,15 @@ function selectFilterChange(event) {
 } //END selectFilterChange function
 /*====================================
  DRAW TABLE
+ filteredData.forEach(sighting => {
+       var newRow = document.createElement('tr');
+       Object.entries(sighting).forEach(([key, value]) => {
+           var td = document.createElement('td');
+           td.innerHTML = value;
+           newRow.appendChild(td);
+       });
+       tbody.node().appendChild(newRow)
+   });
 ======================================*/
 // Get a reference to the table body
 function drawTable(filteredData) {
@@ -213,7 +222,7 @@ function drawTable(filteredData) {
   tmsg.append("p").text(`There were ${resultsLen} records that matched.`);
 // Add the rows and cells of data from the data.js source file.
   filteredData.forEach((ufoSighting) => {
-  tbody.append("tr");
+    var newRow = document.createElement('tr');
   Object.entries(ufoSighting).forEach(([key, value]) => {
     // Pretty up cases in table data
     if (key === "city") {
@@ -224,9 +233,12 @@ function drawTable(filteredData) {
       value = stripHtml(value); }
     else if (key === "shape") {
       value = value.toProperCase();}
-    var cell = tbody.append("td");
-    cell.text(value);
+      // Now add the TD element for each value
+    var cell = document.createElement('td');
+    cell.innerHTML = value;
+    newRow.appendChild(cell);
   }); //end of forEach 2
+  tbody.node().appendChild(newRow)
 }); //end of forEach 1
 
 tmsg.html("");
